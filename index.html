@@ -48,29 +48,37 @@ section{padding:50px 20px;max-width:1100px;margin:auto}
 }
 .card h3{color:#0d47a1;margin-bottom:8px}
 
-/* SLIDER */
+/* SLIDER PREMIUM */
 .slider{
+  position:relative;
   overflow:hidden;
   border-radius:16px;
   box-shadow:0 8px 25px rgba(0,0,0,.15);
 }
 .slides{
   display:flex;
-  width:400%;
-  animation:slide 14s infinite;
+  transition:transform .5s ease;
 }
 .slides img{
   width:100%;
   height:320px;
   object-fit:cover;
+  flex-shrink:0;
 }
-@keyframes slide{
-  0%{transform:translateX(0)}
-  25%{transform:translateX(-100%)}
-  50%{transform:translateX(-200%)}
-  75%{transform:translateX(-300%)}
-  100%{transform:translateX(0)}
+.nav{
+  position:absolute;
+  top:50%;
+  transform:translateY(-50%);
+  background:rgba(0,0,0,.5);
+  color:#fff;
+  border:none;
+  font-size:28px;
+  padding:8px 14px;
+  cursor:pointer;
+  border-radius:50%;
 }
+.prev{left:15px}
+.next{right:15px}
 
 /* MAP */
 .map iframe{
@@ -118,24 +126,34 @@ footer{
   </a>
 </header>
 
-<!-- GALERI FOTO ASLI -->
+<!-- GALERI FOTO ASLI (12 FOTO) -->
 <section>
   <div class="section-title">
     <h2>Galeri Toko Athifa Battery</h2>
-    <p>Foto asli toko & stok aki</p>
+    <p>Foto asli toko, stok aki & aktivitas pengiriman</p>
   </div>
 
-  <div class="slider">
+  <div class="slider" id="slider">
     <div class="slides">
-      <img src="toko1.jpg" alt="Toko Athifa Battery">
-      <img src="toko2.jpg" alt="Stok Aki Athifa Battery">
-      <img src="toko3.jpg" alt="Distributor Aki Athifa Battery">
-      <img src="toko4.jpg" alt="Pengiriman Aki Athifa Battery">
+      <img src="toko1.jpg">
+      <img src="toko2.jpg">
+      <img src="toko3.jpg">
+      <img src="toko4.jpg">
+      <img src="toko5.jpg">
+      <img src="toko6.jpg">
+      <img src="toko7.jpg">
+      <img src="toko8.jpg">
+      <img src="toko9.jpg">
+      <img src="toko10.jpg">
+      <img src="toko11.jpg">
+      <img src="toko12.jpg">
     </div>
+    <button class="nav prev">&#10094;</button>
+    <button class="nav next">&#10095;</button>
   </div>
 </section>
 
-<!-- PROFIL -->
+<!-- PROFIL TOKO -->
 <section>
   <div class="grid">
     <div class="card">
@@ -170,15 +188,9 @@ footer{
   <div style="text-align:center;margin-top:20px">
     <a href="https://maps.google.com/?q=-6.002924,106.087996"
        target="_blank"
-       style="
-       display:inline-block;
-       background:#0d47a1;
-       color:#fff;
-       padding:16px 30px;
-       border-radius:50px;
-       font-weight:bold;
-       box-shadow:0 6px 18px rgba(0,0,0,.25);
-       line-height:1.4;">
+       style="display:inline-block;background:#0d47a1;color:#fff;
+       padding:16px 30px;border-radius:50px;font-weight:bold;
+       box-shadow:0 6px 18px rgba(0,0,0,.25);line-height:1.4;">
       📍 Buka Lokasi di Google Maps<br>
       ⭐⭐⭐⭐⭐ 5.0 • 52 Ulasan
     </a>
@@ -240,6 +252,52 @@ footer{
 </footer>
 
 <a class="float-wa" href="https://wa.me/6287882385071" target="_blank">💬</a>
+
+<!-- JAVASCRIPT SLIDER -->
+<script>
+const slides = document.querySelector('.slides');
+const images = document.querySelectorAll('.slides img');
+const prev = document.querySelector('.prev');
+const next = document.querySelector('.next');
+
+let index = 0;
+let interval;
+
+function showSlide(i){
+  if(i >= images.length) index = 0;
+  if(i < 0) index = images.length - 1;
+  slides.style.transform = `translateX(-${index * 100}%)`;
+}
+
+function startAuto(){
+  interval = setInterval(() => {
+    index++;
+    showSlide(index);
+  }, 3000);
+}
+function stopAuto(){ clearInterval(interval); }
+
+next.onclick = () => { index++; showSlide(index); }
+prev.onclick = () => { index--; showSlide(index); }
+
+let startX = 0;
+slides.addEventListener('touchstart', e => {
+  stopAuto();
+  startX = e.touches[0].clientX;
+});
+slides.addEventListener('touchend', e => {
+  let endX = e.changedTouches[0].clientX;
+  if(startX - endX > 50) index++;
+  if(endX - startX > 50) index--;
+  showSlide(index);
+  startAuto();
+});
+
+document.getElementById('slider').addEventListener('mouseenter', stopAuto);
+document.getElementById('slider').addEventListener('mouseleave', startAuto);
+
+startAuto();
+</script>
 
 </body>
 </html>
